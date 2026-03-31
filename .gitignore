@@ -1,5 +1,6 @@
-instance/                                                                                                                                    
-  *.db                                                                                                                                               
-  .DS_Store                                                                                                                                          
-  __pycache__/                                                                                                                                       
-  *.pyc
+instance/
+*.db
+.DS_Store
+__pycache__/
+*.pyc
+uploads/

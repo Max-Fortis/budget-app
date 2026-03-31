@@ -37,17 +37,23 @@
         <!-- Add Transaction Form -->
         <div class="form-section">
             <h3>Add Transaction</h3>
-            <form action="/add_transaction" method="POST">
-                <input type="number" name="amount" step="0.01" placeholder="Amount" required>
+            <div id="extraction-status" class="extraction-status" style="display: none;"></div>
+            <form id="transaction-form" action="/add_transaction" method="POST" enctype="multipart/form-data">
+                <input type="number" id="amount-input" name="amount" step="0.01" placeholder="Amount" required>
 
-                <select name="category_id" required>
+                <select id="category-select" name="category_id" required>
                     <option value="">Select Category</option>
                     {% for category in categories %}
                         <option value="{{ category.id }}">{{ category.name }}</option>
                     {% endfor %}
                 </select>
 
-                <input type="text" name="description" placeholder="Description (optional)">
+                <input type="text" id="description-input" name="description" placeholder="Description (optional)">
+
+                <div class="file-upload">
+                    <label for="receipt">Receipt Image (AI extraction enabled):</label>
+                    <input type="file" name="receipt" id="receipt" accept="image/*">
+                </div>
 
                 <button type="submit">Add Transaction</button>
             </form>
@@ -73,6 +79,7 @@
                             <th>Amount</th>
                             <th>Category</th>
                             <th>Description</th>
+                            <th>Receipt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,6 +89,13 @@
                             <td>${{ "%.2f"|format(transaction.amount) }}</td>
                             <td>{{ transaction.category.name }}</td>
                             <td>{{ transaction.description }}</td>
+                            <td>
+                                {% if transaction.receipt_image %}
+                                    <a href="{{ url_for('uploaded_file', filename=transaction.receipt_image) }}" target="_blank" class="receipt-link">View Receipt</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -91,5 +105,64 @@
             {% endif %}
         </div>
     </div>
+
+    <script>
+        // Handle receipt image upload and extraction
+        document.getElementById('receipt').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const statusDiv = document.getElementById('extraction-status');
+            const amountInput = document.getElementById('amount-input');
+            const descriptionInput = document.getElementById('description-input');
+
+            // Show loading status
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'extraction-status loading';
+            statusDiv.textContent = 'Extracting receipt data with AI...';
+
+            try {
+                // Create form data and send to extraction endpoint
+                const formData = new FormData();
+                formData.append('receipt', file);
+
+                const response = await fetch('/extract_receipt', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Auto-fill form fields with extracted data
+                    if (data.amount) {
+                        amountInput.value = data.amount;
+                    }
+                    if (data.merchant) {
+                        descriptionInput.value = data.merchant;
+                    }
+
+                    // Show success message
+                    statusDiv.className = 'extraction-status success';
+                    statusDiv.textContent = '✓ Receipt data extracted! Review and submit.';
+
+                    // Hide status after 5 seconds
+                    setTimeout(() => {
+                        statusDiv.style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error(data.error || 'Extraction failed');
+                }
+            } catch (error) {
+                statusDiv.className = 'extraction-status error';
+                statusDiv.textContent = '⚠ Could not extract data: ' + error.message;
+
+                // Hide error after 5 seconds
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
 </body>
 </html>

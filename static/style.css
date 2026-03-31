@@ -112,3 +112,57 @@ th {
 tbody tr:hover {
     background: #fafafa;
 }
+
+.file-upload {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.file-upload label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #1d1d1f;
+}
+
+.file-upload input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.receipt-link {
+    color: #0071e3;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.receipt-link:hover {
+    text-decoration: underline;
+}
+
+.extraction-status {
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.extraction-status.loading {
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #90caf9;
+}
+
+.extraction-status.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #81c784;
+}
+
+.extraction-status.error {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef5350;
+}

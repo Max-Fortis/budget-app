@@ -22,6 +22,7 @@ class Transaction(db.Model):
     amount = db.Column(db.Float, nullable=False)
     description = db.Column(db.String(200))
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    receipt_image = db.Column(db.String(300))  # Stores the filename of the receipt image
 
     # Foreign key linking to Category table
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
