@@ -224,10 +224,92 @@ def init_default_categories():
     db.session.commit()
 
 
+@app.route('/scan')
+def scan():
+    """Receipt scanning / AI extraction page"""
+    categories = Category.query.all()
+    return render_template('scan.html', categories=categories)
+
+
+@app.route('/budgets')
+def budgets():
+    """Budget overview page with per-category spending"""
+    categories = Category.query.all()
+    budget = Budget.query.first()
+
+    now = datetime.now()
+    month_start = datetime(now.year, now.month, 1)
+
+    # Build per-category spending for current month
+    category_data = []
+    total_spent = 0
+    for cat in categories:
+        spent = db.session.query(db.func.sum(Transaction.amount)).filter(
+            Transaction.category_id == cat.id,
+            Transaction.date >= month_start
+        ).scalar() or 0
+        total_spent += spent
+        category_data.append({
+            'category': cat,
+            'spent': spent,
+            'limit': cat.budget_limit or 0,
+            'pct': round((spent / cat.budget_limit * 100) if cat.budget_limit else 0)
+        })
+
+    # Spending history: last 10 days with amounts
+    from collections import defaultdict
+    history_raw = db.session.query(
+        db.func.date(Transaction.date), db.func.sum(Transaction.amount)
+    ).group_by(db.func.date(Transaction.date)).order_by(
+        db.func.date(Transaction.date).desc()
+    ).limit(10).all()
+    history = list(reversed(history_raw))
+    max_day = max((h[1] for h in history), default=1)
+
+    monthly_limit = budget.monthly_limit if budget else 0
+    remaining = monthly_limit - total_spent if budget else 0
+
+    return render_template('budgets.html',
+                           category_data=category_data,
+                           budget=budget,
+                           total_spent=total_spent,
+                           remaining=remaining,
+                           history=history,
+                           max_day=max_day,
+                           month_name=now.strftime('%B'),
+                           categories=categories)
+
+
+@app.route('/set_category_budget', methods=['POST'])
+def set_category_budget():
+    """Set budget limit for a category"""
+    category_id = int(request.form['category_id'])
+    limit = float(request.form['limit'])
+    cat = Category.query.get(category_id)
+    if cat:
+        cat.budget_limit = limit
+        db.session.commit()
+    return redirect(url_for('budgets'))
+
+
+@app.route('/styleguide')
+def styleguide():
+    """Design system style guide"""
+    return render_template('styleguide.html')
+
+
 if __name__ == '__main__':
     with app.app_context():
         # Create all database tables
         db.create_all()
+        # Add budget_limit column to existing category tables (idempotent)
+        try:
+            db.session.execute(db.text(
+                'ALTER TABLE category ADD COLUMN budget_limit FLOAT DEFAULT 0.0'
+            ))
+            db.session.commit()
+        except Exception:
+            pass  # Column already exists
         # Add default categories
         init_default_categories()
 
