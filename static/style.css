@@ -94,8 +94,8 @@ html, body {
   gap: 12px;
 }
 .topbar__logo-icon {
-  width: 18px;
-  height: 18px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
 }
 .topbar__wordmark {
