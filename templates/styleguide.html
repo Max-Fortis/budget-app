@@ -1,0 +1,571 @@
+{% extends "base.html" %}
+{% block title %}Iceberg — Style Guide{% endblock %}
+
+{% block body %}
+<div class="sg-page">
+
+  <!-- Header -->
+  <header class="sg-header">
+    <div class="sg-header-inner">
+      <div class="sg-header-title">
+        <span class="sg-logo-mark">■</span>
+        <span>ICEBERG STYLE GUIDE</span>
+      </div>
+      <span class="sg-version">System Documentation / Version 01</span>
+    </div>
+  </header>
+
+  <main class="sg-main">
+
+    <!-- 01. Color Palette -->
+    <section class="sg-section">
+      <div class="sg-section-label">
+        <span class="sg-bullet"></span>
+        <span>01. Core Palette</span>
+      </div>
+      <div class="sg-color-grid">
+        <div class="sg-color-item">
+          <div class="sg-swatch" style="background:#AB2E15;"></div>
+          <p class="sg-color-name">PRIMARY</p>
+          <p class="sg-color-hex">#AB2E15</p>
+          <p class="sg-color-use">Alerts, active states, CTA buttons</p>
+        </div>
+        <div class="sg-color-item">
+          <div class="sg-swatch" style="background:#1B1C18;"></div>
+          <p class="sg-color-name">INK</p>
+          <p class="sg-color-hex">#1B1C18</p>
+          <p class="sg-color-use">Body text, headings, dark UI</p>
+        </div>
+        <div class="sg-color-item">
+          <div class="sg-swatch" style="background:#FBF9F2; border:1px solid #E1BFB8;"></div>
+          <p class="sg-color-name">PAPER</p>
+          <p class="sg-color-hex">#FBF9F2</p>
+          <p class="sg-color-use">Page background, nav bars</p>
+        </div>
+        <div class="sg-color-item">
+          <div class="sg-swatch" style="background:#F6F4EC;"></div>
+          <p class="sg-color-name">SURFACE</p>
+          <p class="sg-color-hex">#F6F4EC</p>
+          <p class="sg-color-use">Cards, panels, input fields</p>
+        </div>
+        <div class="sg-color-item">
+          <div class="sg-swatch" style="background:#E4E2DC;"></div>
+          <p class="sg-color-name">MUTED</p>
+          <p class="sg-color-hex">#E4E2DC</p>
+          <p class="sg-color-use">Progress bar tracks, secondary bg</p>
+        </div>
+        <div class="sg-color-item">
+          <div class="sg-swatch" style="background:#326270;"></div>
+          <p class="sg-color-name">ACCENT</p>
+          <p class="sg-color-hex">#326270</p>
+          <p class="sg-color-use">Positive states, stable indicators</p>
+        </div>
+        <div class="sg-color-item">
+          <div class="sg-swatch" style="background:#775A00;"></div>
+          <p class="sg-color-name">WARNING</p>
+          <p class="sg-color-hex">#775A00</p>
+          <p class="sg-color-use">Category labels, caution states</p>
+        </div>
+        <div class="sg-color-item">
+          <div class="sg-swatch" style="background:#E1BFB8;"></div>
+          <p class="sg-color-name">OUTLINE</p>
+          <p class="sg-color-hex">#E1BFB8</p>
+          <p class="sg-color-use">Borders, dividers, archived badges</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02. Typography -->
+    <section class="sg-section">
+      <div class="sg-section-label">
+        <span class="sg-bullet"></span>
+        <span>02. Typography Scale</span>
+      </div>
+      <div class="sg-type-stack">
+        <div class="sg-type-row">
+          <div class="sg-type-meta">
+            <span>DISPLAY</span>
+            <span>Space Grotesk Bold · 60px · -3px tracking</span>
+          </div>
+          <div class="sg-type-display">$14,250.00</div>
+        </div>
+        <div class="sg-type-row">
+          <div class="sg-type-meta">
+            <span>HEADLINE LG</span>
+            <span>Space Grotesk Bold · 48px · -2.4px tracking · UPPERCASE</span>
+          </div>
+          <div class="sg-type-headline-lg">Overview</div>
+        </div>
+        <div class="sg-type-row">
+          <div class="sg-type-meta">
+            <span>HEADLINE MD</span>
+            <span>Space Grotesk Bold · 30px</span>
+          </div>
+          <div class="sg-type-headline-md">Technical Precision</div>
+        </div>
+        <div class="sg-type-row">
+          <div class="sg-type-meta">
+            <span>HEADING</span>
+            <span>Space Grotesk Bold · 20px · -0.5px tracking · UPPERCASE</span>
+          </div>
+          <div class="sg-type-heading">Groceries</div>
+        </div>
+        <div class="sg-type-row">
+          <div class="sg-type-meta">
+            <span>DATA</span>
+            <span>Space Grotesk Medium · 18px</span>
+          </div>
+          <div class="sg-type-data">ACC_29384 &nbsp; TRX_REF_01 &nbsp; 2024-05-12</div>
+        </div>
+        <div class="sg-type-row">
+          <div class="sg-type-meta">
+            <span>LABEL</span>
+            <span>Space Grotesk Bold · 12px · 1.2px tracking · UPPERCASE</span>
+          </div>
+          <div class="sg-type-label">SCAN RECEIPT</div>
+        </div>
+        <div class="sg-type-row">
+          <div class="sg-type-meta">
+            <span>META / CAPTION</span>
+            <span>Space Grotesk Regular · 10px · 2px tracking · UPPERCASE</span>
+          </div>
+          <div class="sg-type-meta-text">REMAINING BUDGET &nbsp;·&nbsp; RECENT ACTIVITY &nbsp;·&nbsp; 2023-10-24 14:22</div>
+        </div>
+        <div class="sg-type-row">
+          <div class="sg-type-meta">
+            <span>BODY</span>
+            <span>Inter Regular · 14px · 1.625 line height</span>
+          </div>
+          <div class="sg-type-body">Financial data visualization demands a hierarchy that prioritizes rapid comprehension and mathematical absolute clarity.</div>
+        </div>
+        <div class="sg-type-row">
+          <div class="sg-type-meta">
+            <span>BODY ITALIC</span>
+            <span>Inter Italic · 14px</span>
+          </div>
+          <div class="sg-type-body-italic">Add a quick transaction to your list.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. Buttons -->
+    <section class="sg-section">
+      <div class="sg-section-label">
+        <span class="sg-bullet"></span>
+        <span>03. Tactical Actions</span>
+      </div>
+      <div class="sg-button-grid">
+        <div class="sg-button-item">
+          <button class="btn btn-primary">Primary Action</button>
+          <p class="sg-token">btn-primary</p>
+          <p class="sg-color-use">bg #AB2E15 · white text · px-24 py-12</p>
+        </div>
+        <div class="sg-button-item">
+          <button class="btn btn-primary" disabled>Disabled</button>
+          <p class="sg-token">btn-primary[disabled]</p>
+          <p class="sg-color-use">opacity 50%</p>
+        </div>
+        <div class="sg-button-item">
+          <button class="btn btn-secondary">Secondary</button>
+          <p class="sg-token">btn-secondary</p>
+          <p class="sg-color-use">bg #E4E2DC · ink text</p>
+        </div>
+        <div class="sg-button-item">
+          <button class="btn btn-outlined">Outlined</button>
+          <p class="sg-token">btn-outlined</p>
+          <p class="sg-color-use">border #AB2E15 · primary text</p>
+        </div>
+        <div class="sg-button-item">
+          <button class="btn btn-ghost">+ Add Entry</button>
+          <p class="sg-token">btn-ghost</p>
+          <p class="sg-color-use">no bg · ink text</p>
+        </div>
+        <div class="sg-button-item">
+          <button class="btn btn-underline">Download Report</button>
+          <p class="sg-token">btn-underline</p>
+          <p class="sg-color-use">underline only · accent text</p>
+        </div>
+        <div class="sg-button-item">
+          <button class="btn btn-dark">Add Transaction</button>
+          <p class="sg-token">btn-dark</p>
+          <p class="sg-color-use">bg #FBF9F2 · ink text · on dark bg</p>
+        </div>
+        <div class="sg-button-item">
+          <button class="btn btn-archive">Access Full Archive</button>
+          <p class="sg-token">btn-archive</p>
+          <p class="sg-color-use">dashed border · muted text</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. Status Badges -->
+    <section class="sg-section">
+      <div class="sg-section-label">
+        <span class="sg-bullet"></span>
+        <span>04. Status Badges</span>
+      </div>
+      <div class="sg-badge-row">
+        <div class="sg-badge-item">
+          <span class="badge badge-critical">Critical</span>
+          <p class="sg-token">badge-critical</p>
+          <p class="sg-color-use">bg #AB2E15 · white</p>
+        </div>
+        <div class="sg-badge-item">
+          <span class="badge badge-pending">Pending</span>
+          <p class="sg-token">badge-pending</p>
+          <p class="sg-color-use">bg #E4E2DC · ink</p>
+        </div>
+        <div class="sg-badge-item">
+          <span class="badge badge-internal">Internal</span>
+          <p class="sg-token">badge-internal</p>
+          <p class="sg-color-use">bg #326270 · white</p>
+        </div>
+        <div class="sg-badge-item">
+          <span class="badge badge-archived">Archived</span>
+          <p class="sg-token">badge-archived</p>
+          <p class="sg-color-use">border #E1BFB8 · muted text</p>
+        </div>
+        <div class="sg-badge-item">
+          <span class="badge badge-active">● Active</span>
+          <p class="sg-token">badge-active</p>
+          <p class="sg-color-use">dot indicator · primary</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. Progress Bars -->
+    <section class="sg-section">
+      <div class="sg-section-label">
+        <span class="sg-bullet"></span>
+        <span>05. Data Instrumentation</span>
+      </div>
+      <div class="sg-progress-stack">
+        <div class="sg-progress-item">
+          <div class="sg-progress-header">
+            <span class="sg-type-meta-text">Dining · Looking Good</span>
+            <span class="sg-type-meta-text" style="color:#326270;">STABLE</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill progress-stable" style="width:70%;"></div>
+          </div>
+          <p class="sg-color-use">Fill: #326270 — under 80% of limit</p>
+        </div>
+        <div class="sg-progress-item">
+          <div class="sg-progress-header">
+            <span class="sg-type-meta-text">Groceries · Almost at Limit</span>
+            <span class="sg-type-meta-text" style="color:#775A00;">WARNING</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill progress-warning" style="width:85%;"></div>
+          </div>
+          <p class="sg-color-use">Fill: #775A00 — 80–95% of limit</p>
+        </div>
+        <div class="sg-progress-item">
+          <div class="sg-progress-header">
+            <span class="sg-type-meta-text">Entertainment · Over Budget</span>
+            <span class="sg-type-meta-text" style="color:#AB2E15;">CRITICAL</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill progress-critical" style="width:98%;"></div>
+          </div>
+          <p class="sg-color-use">Fill: #AB2E15 — over 95% of limit</p>
+        </div>
+        <div class="sg-progress-item">
+          <div class="sg-progress-header">
+            <span class="sg-type-meta-text">Rent · Paid for the Month</span>
+            <span class="sg-type-meta-text" style="color:rgba(27,28,24,0.4);">PAID</span>
+          </div>
+          <div class="progress-track progress-track-tall">
+            <div class="progress-fill progress-paid" style="width:100%;"></div>
+          </div>
+          <p class="sg-color-use">Fill: #1B1C18 — paid / complete</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06. Cards -->
+    <section class="sg-section">
+      <div class="sg-section-label">
+        <span class="sg-bullet"></span>
+        <span>06. Cards &amp; Panels</span>
+      </div>
+      <div class="sg-card-grid">
+        <div class="card">
+          <div class="sg-type-meta-text" style="opacity:0.5;">REMAINING BUDGET</div>
+          <div class="sg-type-display" style="margin-top:4px;">$1,234.00</div>
+          <div class="progress-track progress-track-tall" style="margin-top:12px;">
+            <div class="progress-fill progress-critical" style="width:62%;"></div>
+          </div>
+          <p class="sg-token" style="margin-top:12px;">card — budget status</p>
+        </div>
+        <div class="card">
+          <div class="sg-type-heading">Groceries</div>
+          <div style="display:flex; align-items:flex-end; gap:4px; margin-top:24px;">
+            <span class="sg-type-headline-md">$785</span>
+            <span style="font-size:18px; opacity:0.4; margin-bottom:2px;">.20</span>
+            <span class="sg-type-meta-text" style="margin-left:auto; opacity:0.4;">of $800</span>
+          </div>
+          <div class="progress-track" style="margin-top:12px;">
+            <div class="progress-fill progress-warning" style="width:98%;"></div>
+          </div>
+          <div class="badge badge-critical" style="margin-top:12px;">Almost at limit</div>
+          <p class="sg-token" style="margin-top:12px;">card — budget category</p>
+        </div>
+        <div class="card card-dark">
+          <div class="sg-type-meta-text" style="color:rgba(251,249,242,0.6); text-align:center;">NEW ENTRY</div>
+          <div class="sg-type-body-italic" style="color:rgba(251,249,242,0.8); text-align:center; margin-top:8px;">Add a quick transaction to your list.</div>
+          <button class="btn btn-dark" style="margin-top:16px; width:100%;">Add Transaction</button>
+          <p class="sg-token" style="color:rgba(251,249,242,0.4); margin-top:12px;">card-dark — CTA block</p>
+        </div>
+        <div class="card card-alert">
+          <div class="sg-type-meta-text" style="color:#AB2E15;">SUGGESTION</div>
+          <div class="sg-type-body" style="margin-top:8px;">You're spending less on <strong>Dining</strong> than usual. You'll have an extra <span style="color:#326270; font-family:'Space Grotesk', sans-serif; font-weight:700;">$1,420.80</span> by the end of the month.</div>
+          <p class="sg-token" style="margin-top:12px;">card-alert — insight block</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07. Form Inputs -->
+    <section class="sg-section">
+      <div class="sg-section-label">
+        <span class="sg-bullet"></span>
+        <span>07. Input Systems</span>
+      </div>
+      <div class="sg-input-grid">
+        <div class="form-group">
+          <label class="form-label">Transaction Name</label>
+          <input class="form-input" type="text" placeholder="e.g. AWS_CLOUD_SERVICES">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date Picker</label>
+          <input class="form-input" type="date" value="2024-06-15">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-input form-select">
+            <option>Fixed Infrastructure</option>
+            <option>Groceries</option>
+            <option>Dining</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Amount</label>
+          <input class="form-input" type="number" placeholder="0.00">
+        </div>
+      </div>
+    </section>
+
+    <!-- 08. Spacing -->
+    <section class="sg-section">
+      <div class="sg-section-label">
+        <span class="sg-bullet"></span>
+        <span>08. Spacing Scale</span>
+      </div>
+      <div class="sg-spacing-stack">
+        {% for size, label in [('4px','--space-1 · 4px'),('8px','--space-2 · 8px'),('12px','--space-3 · 12px'),('16px','--space-4 · 16px'),('24px','--space-6 · 24px'),('32px','--space-8 · 32px'),('40px','--space-10 · 40px'),('48px','--space-12 · 48px')] %}
+        <div class="sg-spacing-row">
+          <div class="sg-spacing-bar" style="width:{{ size }}; background:#AB2E15; height:16px;"></div>
+          <span class="sg-token">{{ label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<style>
+/* =============================================
+   ICEBERG STYLE GUIDE — STANDALONE STYLES
+   ============================================= */
+
+/* --- CSS Variables (design tokens) --- */
+:root {
+  --color-primary:   #AB2E15;
+  --color-ink:       #1B1C18;
+  --color-paper:     #FBF9F2;
+  --color-surface:   #F6F4EC;
+  --color-muted:     #E4E2DC;
+  --color-accent:    #326270;
+  --color-warning:   #775A00;
+  --color-outline:   #E1BFB8;
+  --color-input-bg:  #F0EEE7;
+
+  --font-display:    'Space Grotesk', sans-serif;
+  --font-body:       'Inter', sans-serif;
+
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+}
+
+/* --- Page Layout --- */
+.sg-page { background: var(--color-paper); min-height: 100vh; font-family: var(--font-body); color: var(--color-ink); }
+
+.sg-header {
+  background: var(--color-paper);
+  border-bottom: 1px solid rgba(27,28,24,0.15);
+  position: sticky; top: 0; z-index: 100;
+  padding: 0 var(--space-6);
+  height: 64px;
+  display: flex; align-items: center;
+}
+.sg-header-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1280px; margin: 0 auto; }
+.sg-header-title { display: flex; align-items: center; gap: var(--space-3); font-family: var(--font-display); font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
+.sg-logo-mark { color: var(--color-primary); font-size: 10px; }
+.sg-version { font-family: var(--font-display); font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(27,28,24,0.4); }
+
+.sg-main { max-width: 1280px; margin: 0 auto; padding: var(--space-12) var(--space-6); display: flex; flex-direction: column; gap: 80px; }
+
+/* --- Sections --- */
+.sg-section { display: flex; flex-direction: column; gap: var(--space-8); }
+.sg-section-label {
+  display: flex; align-items: center; gap: var(--space-2);
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 12px; letter-spacing: 2.4px; text-transform: uppercase;
+  color: var(--color-primary);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid rgba(27,28,24,0.1);
+}
+.sg-bullet { width: 8px; height: 8px; background: var(--color-primary); flex-shrink: 0; }
+
+/* --- Colors --- */
+.sg-color-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); }
+.sg-swatch { height: 64px; width: 100%; }
+.sg-color-name { font-family: var(--font-display); font-weight: 700; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin: var(--space-2) 0 2px; }
+.sg-color-hex { font-family: var(--font-display); font-size: 12px; color: rgba(27,28,24,0.6); margin: 0 0 4px; }
+.sg-color-use { font-family: var(--font-body); font-size: 11px; color: rgba(27,28,24,0.5); margin: 0; }
+
+/* --- Typography --- */
+.sg-type-stack { display: flex; flex-direction: column; gap: 0; }
+.sg-type-row { display: flex; align-items: center; gap: var(--space-8); padding: var(--space-6) 0; border-bottom: 1px solid rgba(27,28,24,0.06); }
+.sg-type-meta { display: flex; flex-direction: column; gap: 4px; min-width: 260px; flex-shrink: 0; }
+.sg-type-meta span:first-child { font-family: var(--font-display); font-weight: 700; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-primary); }
+.sg-type-meta span:last-child { font-family: var(--font-body); font-size: 11px; color: rgba(27,28,24,0.5); }
+
+.sg-type-display      { font-family: var(--font-display); font-weight: 700; font-size: 60px; letter-spacing: -3px; line-height: 1; color: var(--color-ink); }
+.sg-type-headline-lg  { font-family: var(--font-display); font-weight: 700; font-size: 48px; letter-spacing: -2.4px; line-height: 1; text-transform: uppercase; color: var(--color-ink); }
+.sg-type-headline-md  { font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1.2; color: var(--color-ink); }
+.sg-type-heading      { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.5px; text-transform: uppercase; color: var(--color-ink); }
+.sg-type-data         { font-family: var(--font-display); font-weight: 500; font-size: 18px; color: var(--color-ink); }
+.sg-type-label        { font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--color-ink); }
+.sg-type-meta-text    { font-family: var(--font-display); font-weight: 400; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(27,28,24,0.5); }
+.sg-type-body         { font-family: var(--font-body); font-weight: 400; font-size: 14px; line-height: 1.625; color: rgba(89,65,60,0.8); }
+.sg-type-body-italic  { font-family: var(--font-body); font-style: italic; font-size: 14px; line-height: 1.625; color: rgba(89,65,60,0.8); }
+
+/* --- Buttons --- */
+.sg-button-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); }
+.sg-button-item { display: flex; flex-direction: column; gap: var(--space-2); }
+.sg-token { font-family: var(--font-display); font-size: 10px; letter-spacing: 0.5px; color: rgba(27,28,24,0.4); margin: 4px 0 0; font-weight: 500; }
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.85; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary   { background: var(--color-primary); color: white; }
+.btn-secondary { background: var(--color-muted); color: var(--color-ink); border: 1px solid rgba(27,28,24,0.1); }
+.btn-outlined  { background: transparent; color: var(--color-primary); border: 1px solid var(--color-primary); }
+.btn-ghost     { background: transparent; color: var(--color-ink); padding-left: 0; padding-right: 0; }
+.btn-underline { background: transparent; color: var(--color-accent); border: none; border-bottom: 1px solid rgba(50,98,112,0.3); padding: 2px 0; font-size: 12px; }
+.btn-dark      { background: var(--color-paper); color: var(--color-ink); }
+.btn-archive   { background: transparent; color: rgba(27,28,24,0.4); border: 1px dashed rgba(27,28,24,0.2); width: 100%; }
+
+/* --- Badges --- */
+.sg-badge-row { display: flex; gap: var(--space-8); flex-wrap: wrap; }
+.sg-badge-item { display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start; }
+
+.badge {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  display: inline-block;
+}
+.badge-critical { background: var(--color-primary); color: white; }
+.badge-pending  { background: var(--color-muted); color: var(--color-ink); }
+.badge-internal { background: var(--color-accent); color: white; }
+.badge-archived { border: 1px solid var(--color-outline); color: #59413C; background: transparent; }
+.badge-active   { background: transparent; color: var(--color-primary); padding: 0; font-size: 10px; }
+
+/* --- Progress Bars --- */
+.sg-progress-stack { display: flex; flex-direction: column; gap: var(--space-8); }
+.sg-progress-item { display: flex; flex-direction: column; gap: var(--space-4); }
+.sg-progress-header { display: flex; justify-content: space-between; }
+
+.progress-track      { background: var(--color-muted); height: 4px; width: 100%; position: relative; overflow: hidden; }
+.progress-track-tall { height: 16px; border: 1px solid rgba(27,28,24,0.05); padding: 3px; background: var(--color-muted); }
+.progress-track-tall .progress-fill { height: 8px; }
+
+.progress-fill         { height: 100%; transition: width 0.3s ease; }
+.progress-stable       { background: var(--color-accent); }
+.progress-warning      { background: var(--color-warning); }
+.progress-critical     { background: var(--color-primary); }
+.progress-paid         { background: var(--color-ink); }
+
+/* --- Cards --- */
+.sg-card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+
+.card { background: var(--color-surface); border: 1px solid rgba(27,28,24,0.1); padding: 25px; }
+.card-dark { background: var(--color-ink); }
+.card-alert { background: var(--color-surface); border-left: 4px solid var(--color-primary); padding-left: 28px; }
+
+/* --- Forms --- */
+.sg-input-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+
+.form-group { display: flex; flex-direction: column; gap: var(--space-2); }
+.form-label {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #59413C;
+}
+.form-input {
+  background: var(--color-input-bg);
+  border: none;
+  padding: 13px 16px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--color-ink);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.form-input::placeholder { color: rgba(89,65,60,0.3); }
+.form-input:focus { box-shadow: inset 0 0 0 1px var(--color-primary); }
+.form-select { appearance: none; cursor: pointer; }
+
+/* --- Spacing --- */
+.sg-spacing-stack { display: flex; flex-direction: column; gap: var(--space-4); }
+.sg-spacing-row { display: flex; align-items: center; gap: var(--space-4); }
+
+@media (max-width: 768px) {
+  .sg-color-grid { grid-template-columns: repeat(2, 1fr); }
+  .sg-button-grid { grid-template-columns: repeat(2, 1fr); }
+  .sg-card-grid { grid-template-columns: 1fr; }
+  .sg-input-grid { grid-template-columns: 1fr; }
+  .sg-type-row { flex-direction: column; align-items: flex-start; }
+}
+</style>
+{% endblock %}
