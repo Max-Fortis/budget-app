@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block title %}Iceberg — Scan Receipt{% endblock %}
+
+{% block body %}
+<div class="app-shell app-shell--light">
+
+  <!-- Top App Bar -->
+  <header class="topbar topbar--frosted">
+    <div class="topbar__back-group">
+      <a href="{{ url_for('index') }}" class="topbar__back">
+        <img src="{{ url_for('static', filename='icons/icon-back.svg') }}" alt="Back">
+      </a>
+      <span class="topbar__wordmark topbar__wordmark--dark">ICEBERG</span>
+    </div>
+    <div class="topbar__avatar">
+      <img src="{{ url_for('static', filename='icons/logo-dots.svg') }}" alt="Profile" class="topbar__avatar-img">
+    </div>
+  </header>
+
+  <!-- Main scan area -->
+  <main class="scan-content">
+
+    <!-- State: idle (before upload) -->
+    <div id="scan-idle" class="scan-state">
+      <div class="scan-status-text">
+        <p class="label-caps label-caps--blue">READY</p>
+        <h1 class="scan-heading">Scan a Receipt</h1>
+        <p class="scan-subheading">Upload a photo to extract transaction details automatically.</p>
+      </div>
+      <label for="receipt-input" class="scan-upload-area">
+        <img src="{{ url_for('static', filename='icons/scan.svg') }}" alt="" class="scan-upload-icon">
+        <span class="scan-upload-label">TAP TO UPLOAD RECEIPT</span>
+        <input type="file" id="receipt-input" name="receipt" accept="image/*" capture="environment" class="scan-file-input">
+      </label>
+    </div>
+
+    <!-- State: processing (during AI extraction) -->
+    <div id="scan-processing" class="scan-state" style="display:none;">
+      <div class="scan-status-text">
+        <p class="label-caps label-caps--blue">ACTIVE SCAN</p>
+        <h1 class="scan-heading">Analyzing Spending</h1>
+        <p class="scan-subheading">Reading your receipt details...</p>
+      </div>
+      <div class="scan-module">
+        <div class="scan-module__image-wrap">
+          <img id="receipt-preview" src="" alt="Receipt" class="scan-module__image">
+          <div class="scan-line" id="scan-line"></div>
+        </div>
+        <div class="scan-module__footer">
+          <div class="scan-module__dots">
+            <span class="dot dot--full"></span>
+            <span class="dot dot--mid"></span>
+            <span class="dot dot--faint"></span>
+            <span class="label-tiny label-tiny--mono">Processing...</span>
+          </div>
+          <span class="label-tiny label-tiny--blue label-tiny--mono">-- CLARITY</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- State: success (after extraction, before confirm) -->
+    <div id="scan-success" class="scan-state" style="display:none;">
+      <div class="scan-status-text">
+        <p class="label-caps label-caps--blue">EXTRACTION COMPLETE</p>
+        <h1 class="scan-heading">Review Details</h1>
+        <p class="scan-subheading">Confirm or edit before saving.</p>
+      </div>
+      <div class="scan-module">
+        <div class="scan-module__image-wrap">
+          <img id="receipt-preview-success" src="" alt="Receipt" class="scan-module__image scan-module__image--done">
+        </div>
+        <div class="scan-module__footer">
+          <div class="scan-module__dots">
+            <span class="dot dot--full"></span>
+            <span class="dot dot--full"></span>
+            <span class="dot dot--full"></span>
+            <span class="label-tiny label-tiny--mono">Complete</span>
+          </div>
+          <span id="clarity-label" class="label-tiny label-tiny--blue label-tiny--mono">98% CLARITY</span>
+        </div>
+      </div>
+
+      <!-- Confirm form -->
+      <form id="confirm-form" action="/add_transaction" method="POST" enctype="multipart/form-data" class="scan-confirm-form">
+        <input type="hidden" id="hidden-receipt" name="receipt_data">
+        <label class="field-label">AMOUNT</label>
+        <input type="number" id="confirm-amount" name="amount" step="0.01" placeholder="0.00" required class="field">
+
+        <label class="field-label">MERCHANT / DESCRIPTION</label>
+        <input type="text" id="confirm-description" name="description" placeholder="Store name" class="field">
+
+        <label class="field-label">CATEGORY</label>
+        <select name="category_id" required class="field">
+          <option value="">Select Category</option>
+          {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+
+        <div class="scan-actions">
+          <a href="{{ url_for('index') }}" class="btn-secondary">
+            <img src="{{ url_for('static', filename='icons/icon-cancel.svg') }}" alt="" class="btn-icon">
+            CANCEL
+          </a>
+          <button type="submit" class="btn-primary">
+            <img src="{{ url_for('static', filename='icons/icon-confirm.svg') }}" alt="" class="btn-icon">
+            CONFIRM
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- State: error -->
+    <div id="scan-error" class="scan-state" style="display:none;">
+      <div class="scan-status-text">
+        <p class="label-caps label-caps--red">ERROR</p>
+        <h1 class="scan-heading">Could Not Extract</h1>
+        <p class="scan-subheading" id="error-msg">Unable to read receipt. Please try again.</p>
+      </div>
+      <div class="scan-actions">
+        <a href="{{ url_for('scan') }}" class="btn-secondary">TRY AGAIN</a>
+        <a href="{{ url_for('index') }}" class="btn-primary">GO HOME</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Nav Bar -->
+  <nav class="bottomnav bottomnav--frosted">
+    <a href="{{ url_for('index') }}" class="bottomnav__item">
+      <img src="{{ url_for('static', filename='icons/nav-home.svg') }}" alt="" class="bottomnav__icon">
+      <span>Portal</span>
+    </a>
+    <a href="{{ url_for('scan') }}" class="bottomnav__item bottomnav__item--active">
+      <img src="{{ url_for('static', filename='icons/nav-stream.svg') }}" alt="" class="bottomnav__icon">
+      <span>Stream</span>
+      <span class="bottomnav__dot"></span>
+    </a>
+    <a href="{{ url_for('budgets') }}" class="bottomnav__item">
+      <img src="{{ url_for('static', filename='icons/nav-insights.svg') }}" alt="" class="bottomnav__icon">
+      <span>Insights</span>
+    </a>
+    <a href="#" class="bottomnav__item">
+      <img src="{{ url_for('static', filename='icons/nav-setup.svg') }}" alt="" class="bottomnav__icon">
+      <span>Setup</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+const fileInput = document.getElementById('receipt-input');
+const idleState = document.getElementById('scan-idle');
+const processingState = document.getElementById('scan-processing');
+const successState = document.getElementById('scan-success');
+const errorState = document.getElementById('scan-error');
+
+function showState(name) {
+  [idleState, processingState, successState, errorState].forEach(el => el.style.display = 'none');
+  document.getElementById('scan-' + name).style.display = 'block';
+}
+
+fileInput.addEventListener('change', async function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // Show preview image in both states
+  const objectUrl = URL.createObjectURL(file);
+  document.getElementById('receipt-preview').src = objectUrl;
+  document.getElementById('receipt-preview-success').src = objectUrl;
+
+  showState('processing');
+
+  // Animate scan line
+  const scanLine = document.getElementById('scan-line');
+  scanLine.classList.add('scanning');
+
+  try {
+    const formData = new FormData();
+    formData.append('receipt', file);
+
+    const response = await fetch('/extract_receipt', { method: 'POST', body: formData });
+    const data = await response.json();
+
+    if (response.ok) {
+      if (data.amount) document.getElementById('confirm-amount').value = data.amount;
+      if (data.merchant) document.getElementById('confirm-description').value = data.merchant;
+      showState('success');
+    } else {
+      throw new Error(data.error || 'Extraction failed');
+    }
+  } catch (err) {
+    document.getElementById('error-msg').textContent = err.message;
+    showState('error');
+  }
+});
+</script>
+{% endblock %}

@@ -1,168 +1,178 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Budget Tracker</h1>
+{% extends "base.html" %}
+{% block title %}Iceberg — Add Spending{% endblock %}
 
-        <!-- Budget Status Section -->
-        <div class="budget-status">
-            {% if budget %}
-                <h2>Monthly Budget: ${{ "%.2f"|format(budget.monthly_limit) }}</h2>
-                <p>Spent this month: ${{ "%.2f"|format(monthly_spending) }}</p>
-                <p>Remaining: ${{ "%.2f"|format(budget.monthly_limit - monthly_spending) }}</p>
+{% block body %}
+<div class="app-shell">
 
-                {% if monthly_spending > budget.monthly_limit %}
-                    <p class="over-budget">⚠️ Over budget!</p>
-                {% endif %}
-            {% else %}
-                <p>No budget set yet.</p>
-            {% endif %}
-        </div>
-
-        <!-- Set Budget Form -->
-        <div class="form-section">
-            <h3>Set Monthly Budget</h3>
-            <form action="/set_budget" method="POST">
-                <input type="number" name="monthly_limit" step="0.01" placeholder="2000.00" required>
-                <button type="submit">Set Budget</button>
-            </form>
-        </div>
-
-        <!-- Add Transaction Form -->
-        <div class="form-section">
-            <h3>Add Transaction</h3>
-            <div id="extraction-status" class="extraction-status" style="display: none;"></div>
-            <form id="transaction-form" action="/add_transaction" method="POST" enctype="multipart/form-data">
-                <input type="number" id="amount-input" name="amount" step="0.01" placeholder="Amount" required>
-
-                <select id="category-select" name="category_id" required>
-                    <option value="">Select Category</option>
-                    {% for category in categories %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>
-
-                <input type="text" id="description-input" name="description" placeholder="Description (optional)">
-
-                <div class="file-upload">
-                    <label for="receipt">Receipt Image (AI extraction enabled):</label>
-                    <input type="file" name="receipt" id="receipt" accept="image/*">
-                </div>
-
-                <button type="submit">Add Transaction</button>
-            </form>
-        </div>
-
-        <!-- Add Custom Category Form -->
-        <div class="form-section">
-            <h3>Add Custom Category</h3>
-            <form action="/add_category" method="POST">
-                <input type="text" name="name" placeholder="Category name" required>
-                <button type="submit">Add Category</button>
-            </form>
-        </div>
-
-        <!-- Transactions List -->
-        <div class="transactions">
-            <h3>Recent Transactions</h3>
-            {% if transactions %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Category</th>
-                            <th>Description</th>
-                            <th>Receipt</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in transactions %}
-                        <tr>
-                            <td>{{ transaction.date.strftime('%Y-%m-%d %H:%M') }}</td>
-                            <td>${{ "%.2f"|format(transaction.amount) }}</td>
-                            <td>{{ transaction.category.name }}</td>
-                            <td>{{ transaction.description }}</td>
-                            <td>
-                                {% if transaction.receipt_image %}
-                                    <a href="{{ url_for('uploaded_file', filename=transaction.receipt_image) }}" target="_blank" class="receipt-link">View Receipt</a>
-                                {% else %}
-                                    -
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No transactions yet. Add your first one above!</p>
-            {% endif %}
-        </div>
+  <!-- Top App Bar -->
+  <header class="topbar topbar--instrument">
+    <div class="topbar__brand">
+      <img src="{{ url_for('static', filename='icons/logo-nav.svg') }}" alt="" class="topbar__logo-icon">
+      <span class="topbar__wordmark">INSTRUMENT<br>01</span>
     </div>
+    <div class="topbar__meta">
+      <span class="topbar__meta-item">STATUS:<br>READY</span>
+      <span class="topbar__dot topbar__dot--red">●</span>
+      <span class="topbar__meta-item">SIGNAL:<br>HIGH</span>
+    </div>
+  </header>
 
-    <script>
-        // Handle receipt image upload and extraction
-        document.getElementById('receipt').addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+  <!-- Main scroll area -->
+  <main class="main-content">
 
-            const statusDiv = document.getElementById('extraction-status');
-            const amountInput = document.getElementById('amount-input');
-            const descriptionInput = document.getElementById('description-input');
+    <!-- Corner marks -->
+    <span class="corner corner--tl"></span>
+    <span class="corner corner--tr"></span>
+    <span class="corner corner--bl"></span>
+    <span class="corner corner--br"></span>
 
-            // Show loading status
-            statusDiv.style.display = 'block';
-            statusDiv.className = 'extraction-status loading';
-            statusDiv.textContent = 'Extracting receipt data with AI...';
+    <!-- Hero: Budget Status -->
+    <section class="budget-hero">
+      <div class="budget-hero__top">
+        <div>
+          <p class="label-caps">REMAINING BUDGET</p>
+          <p class="budget-hero__amount">
+            {% if budget %}
+              ${{ "%.2f"|format(budget.monthly_limit - monthly_spending) }}
+            {% else %}
+              $0.00
+            {% endif %}
+          </p>
+        </div>
+        <div class="budget-hero__ref">
+          <p class="label-tiny">Reference: 0001-X</p>
+          <p class="label-tiny">Unit: USD</p>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width: {% if budget and budget.monthly_limit > 0 %}{{ [((monthly_spending / budget.monthly_limit) * 100)|round|int, 100]|min }}%{% else %}0%{% endif %}"></div>
+      </div>
+      <div class="progress-labels">
+        <span>0.00</span>
+        <span>BUDGET LIMIT</span>
+        <span>{{ "%.2f"|format(budget.monthly_limit) if budget else "0.00" }}</span>
+      </div>
+    </section>
 
-            try {
-                // Create form data and send to extraction endpoint
-                const formData = new FormData();
-                formData.append('receipt', file);
+    <!-- Action Buttons -->
+    <section class="action-grid">
+      <a href="{{ url_for('scan') }}" class="action-btn">
+        <div class="action-btn__icon">
+          <img src="{{ url_for('static', filename='icons/scan.svg') }}" alt="">
+        </div>
+        <span class="action-btn__label">SCAN RECEIPT</span>
+      </a>
+      <button class="action-btn" onclick="openManualEntry()">
+        <div class="action-btn__icon">
+          <img src="{{ url_for('static', filename='icons/manual.svg') }}" alt="">
+        </div>
+        <span class="action-btn__label">MANUAL ENTRY</span>
+      </button>
+    </section>
 
-                const response = await fetch('/extract_receipt', {
-                    method: 'POST',
-                    body: formData
-                });
+    <!-- Recent Activity -->
+    <section class="activity-section">
+      <div class="section-divider">
+        <span class="divider-line"></span>
+        <span class="label-caps label-caps--muted">RECENT ACTIVITY</span>
+        <span class="divider-line"></span>
+      </div>
 
-                const data = await response.json();
+      <div class="activity-list">
+        {% for transaction in transactions[:5] %}
+        <div class="activity-item">
+          <div class="activity-item__left">
+            <div class="activity-item__icon-wrap">
+              <img src="{{ url_for('static', filename='icons/icon-bag.svg') }}" alt="">
+            </div>
+            <div>
+              <p class="activity-item__date">{{ transaction.date.strftime('%Y-%m-%d %H:%M') }}</p>
+              <p class="activity-item__name">{{ transaction.description or transaction.category.name }}</p>
+            </div>
+          </div>
+          <div class="activity-item__right">
+            <p class="activity-item__amount">-${{ "%.2f"|format(transaction.amount) }}</p>
+            <p class="activity-item__cat">Category: {{ transaction.category.name }}</p>
+          </div>
+        </div>
+        {% endfor %}
+        {% if not transactions %}
+        <p class="empty-state">No transactions yet.</p>
+        {% endif %}
+      </div>
 
-                if (response.ok) {
-                    // Auto-fill form fields with extracted data
-                    if (data.amount) {
-                        amountInput.value = data.amount;
-                    }
-                    if (data.merchant) {
-                        descriptionInput.value = data.merchant;
-                    }
+      <a href="{{ url_for('budgets') }}" class="archive-btn">ACCESS FULL ARCHIVE</a>
+    </section>
 
-                    // Show success message
-                    statusDiv.className = 'extraction-status success';
-                    statusDiv.textContent = '✓ Receipt data extracted! Review and submit.';
+    <!-- Set Budget (hidden, accessible from nav) -->
+    <section class="form-section-hidden" id="set-budget-section" style="display:none;">
+      <form action="/set_budget" method="POST" class="inline-form">
+        <input type="number" name="monthly_limit" step="0.01" placeholder="Monthly limit e.g. 2000.00" required class="field">
+        <button type="submit" class="btn-primary">Set Budget</button>
+      </form>
+    </section>
 
-                    // Hide status after 5 seconds
-                    setTimeout(() => {
-                        statusDiv.style.display = 'none';
-                    }, 5000);
-                } else {
-                    throw new Error(data.error || 'Extraction failed');
-                }
-            } catch (error) {
-                statusDiv.className = 'extraction-status error';
-                statusDiv.textContent = '⚠ Could not extract data: ' + error.message;
+  </main>
 
-                // Hide error after 5 seconds
-                setTimeout(() => {
-                    statusDiv.style.display = 'none';
-                }, 5000);
-            }
-        });
-    </script>
-</body>
-</html>
+  <!-- Manual Entry Modal -->
+  <div class="modal-overlay" id="manual-modal" onclick="closeManualEntry(event)">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title">MANUAL ENTRY</h2>
+      <div id="extraction-status" class="extraction-status" style="display:none;"></div>
+      <form id="transaction-form" action="/add_transaction" method="POST" enctype="multipart/form-data" class="modal-form">
+        <label class="field-label">AMOUNT</label>
+        <input type="number" id="amount-input" name="amount" step="0.01" placeholder="0.00" required class="field">
+
+        <label class="field-label">CATEGORY</label>
+        <select id="category-select" name="category_id" required class="field">
+          <option value="">Select Category</option>
+          {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+
+        <label class="field-label">DESCRIPTION</label>
+        <input type="text" id="description-input" name="description" placeholder="Optional" class="field">
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeManualEntry()">CANCEL</button>
+          <button type="submit" class="btn-primary">CONFIRM</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bottom Nav Bar -->
+  <nav class="bottomnav">
+    <a href="{{ url_for('index') }}" class="bottomnav__item bottomnav__item--active">
+      <img src="{{ url_for('static', filename='icons/nav-add.svg') }}" alt="" class="bottomnav__icon">
+      <span>Add Spending</span>
+    </a>
+    <a href="{{ url_for('budgets') }}" class="bottomnav__item">
+      <img src="{{ url_for('static', filename='icons/nav-budgets.svg') }}" alt="" class="bottomnav__icon">
+      <span>Budgets</span>
+    </a>
+    <a href="{{ url_for('scan') }}" class="bottomnav__item">
+      <img src="{{ url_for('static', filename='icons/nav-stream.svg') }}" alt="" class="bottomnav__icon">
+      <span>Scan</span>
+    </a>
+    <a href="#" class="bottomnav__item" onclick="document.getElementById('set-budget-section').style.display='block'; return false;">
+      <img src="{{ url_for('static', filename='icons/nav-setup.svg') }}" alt="" class="bottomnav__icon">
+      <span>Setup</span>
+    </a>
+  </nav>
+
+</div>
+
+<script>
+function openManualEntry() {
+  document.getElementById('manual-modal').classList.add('is-open');
+}
+function closeManualEntry(e) {
+  if (!e || e.target === document.getElementById('manual-modal')) {
+    document.getElementById('manual-modal').classList.remove('is-open');
+  }
+}
+</script>
+{% endblock %}

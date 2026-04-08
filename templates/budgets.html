@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}Iceberg — Budgets{% endblock %}
+
+{% block body %}
+<div class="app-shell">
+
+  <!-- Top App Bar -->
+  <header class="topbar topbar--simple">
+    <div class="topbar__brand">
+      <img src="{{ url_for('static', filename='icons/logo-icon.svg') }}" alt="" class="topbar__logo-icon">
+      <span class="topbar__wordmark topbar__wordmark--dark">ICEBERG</span>
+    </div>
+    <div class="topbar__status">
+      <span class="topbar__dot topbar__dot--red"></span>
+      <span class="label-caps label-caps--muted">ACTIVE</span>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- Header Section -->
+    <section class="budgets-header">
+      <h1 class="budgets-title">Overview</h1>
+      <p class="budgets-subtitle">Monthly Budgets // {{ month_name }}</p>
+      <div class="budgets-remaining">
+        <p class="label-tiny label-tiny--muted">Left to Spend</p>
+        <p class="budgets-remaining__amount {% if remaining < 0 %}budgets-remaining__amount--over{% endif %}">
+          {% if remaining >= 0 %}+{% endif %}${{ "%.2f"|format(remaining) }}
+        </p>
+      </div>
+    </section>
+
+    <!-- Insights Block -->
+    <section class="insights-block">
+      <div class="insights-block__inner">
+        <img src="{{ url_for('static', filename='icons/icon-lightbulb.svg') }}" alt="" class="insights-block__icon">
+        <div>
+          <p class="label-caps label-caps--muted">Suggestion</p>
+          <p class="insights-block__text">
+            {% if remaining > 0 %}
+              You're on track this month. If you keep this up, you'll have an extra
+              <strong class="insights-block__highlight">${{ "%.2f"|format(remaining) }}</strong>
+              by the end of {{ month_name }}.
+            {% else %}
+              You've exceeded your monthly budget. Consider reviewing your spending categories below.
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Budget Cards -->
+    <section class="budget-grid">
+      {% for item in category_data %}
+      {% if item.spent > 0 or item.limit > 0 %}
+      <div class="budget-card">
+        <div class="budget-card__header">
+          <h2 class="budget-card__name">{{ item.category.name | upper }}</h2>
+          <button class="budget-card__edit-btn" onclick="openEditBudget({{ item.category.id }}, '{{ item.category.name }}', {{ item.limit }})">EDIT</button>
+        </div>
+        <div class="budget-card__amounts">
+          <span class="budget-card__spent">
+            ${{ "%d"|format(item.spent|int) }}<span class="budget-card__cents">.{{ "%02d"|format(((item.spent % 1) * 100)|int) }}</span>
+          </span>
+          {% if item.limit > 0 %}
+          <span class="budget-card__of-limit">of ${{ "%.0f"|format(item.limit) }}</span>
+          {% endif %}
+        </div>
+        <div class="budget-card__bar-track">
+          <div class="budget-card__bar-fill {% if item.pct >= 95 %}budget-card__bar-fill--danger{% elif item.pct >= 80 %}budget-card__bar-fill--warning{% else %}budget-card__bar-fill--ok{% endif %}"
+               style="width: {{ [item.pct, 100]|min }}%"></div>
+        </div>
+        <p class="budget-card__status {% if item.pct >= 95 %}budget-card__status--danger{% elif item.pct >= 80 %}budget-card__status--warning{% else %}budget-card__status--ok{% endif %}">
+          {% if item.pct >= 100 %}At limit
+          {% elif item.pct >= 95 %}Almost at limit
+          {% elif item.pct >= 80 %}Getting close
+          {% elif item.limit == 0 %}No limit set
+          {% else %}Looking good{% endif %}
+        </p>
+      </div>
+      {% endif %}
+      {% endfor %}
+
+      {% if not category_data %}
+      <p class="empty-state">No spending data yet.</p>
+      {% endif %}
+    </section>
+
+    <!-- Spending History -->
+    <section class="history-section">
+      <p class="label-caps label-caps--muted">Spending History</p>
+      <div class="history-chart">
+        {% if history %}
+          {% for day, amount in history %}
+          <div class="history-bar"
+               style="height: {{ ((amount / max_day) * 100)|round|int }}%"
+               title="{{ day }}: ${{ '%.2f'|format(amount) }}"
+               {% if loop.last %}data-current="true"{% endif %}>
+          </div>
+          {% endfor %}
+        {% else %}
+          {% for i in range(10) %}
+          <div class="history-bar history-bar--empty" style="height: {{ [20, 35, 28, 50, 45, 32, 68, 58, 78, 40][loop.index0] }}%"></div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- Add Transaction CTA -->
+    <section class="cta-block">
+      <p class="label-caps label-caps--paper">NEW ENTRY</p>
+      <p class="cta-block__subtitle">Add a quick transaction to your list.</p>
+      <a href="{{ url_for('index') }}" class="cta-block__btn">ADD TRANSACTION</a>
+    </section>
+
+  </main>
+
+  <!-- Edit Budget Modal -->
+  <div class="modal-overlay" id="edit-budget-modal" onclick="closeEditBudget(event)">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title" id="edit-budget-title">SET BUDGET</h2>
+      <form action="/set_category_budget" method="POST" class="modal-form">
+        <input type="hidden" id="edit-cat-id" name="category_id">
+        <label class="field-label">MONTHLY LIMIT ($)</label>
+        <input type="number" id="edit-cat-limit" name="limit" step="0.01" placeholder="0.00" required class="field">
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeEditBudget()">CANCEL</button>
+          <button type="submit" class="btn-primary">SAVE</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bottom Nav Bar -->
+  <nav class="bottomnav">
+    <a href="{{ url_for('index') }}" class="bottomnav__item">
+      <img src="{{ url_for('static', filename='icons/nav-home.svg') }}" alt="" class="bottomnav__icon">
+      <span>Home</span>
+    </a>
+    <a href="{{ url_for('index') }}#transactions" class="bottomnav__item">
+      <img src="{{ url_for('static', filename='icons/nav-history.svg') }}" alt="" class="bottomnav__icon">
+      <span>History</span>
+    </a>
+    <a href="{{ url_for('budgets') }}" class="bottomnav__item bottomnav__item--active">
+      <img src="{{ url_for('static', filename='icons/nav-budgets.svg') }}" alt="" class="bottomnav__icon">
+      <span>Budgets</span>
+    </a>
+    <a href="#" class="bottomnav__item">
+      <img src="{{ url_for('static', filename='icons/nav-profile.svg') }}" alt="" class="bottomnav__icon">
+      <span>Profile</span>
+    </a>
+  </nav>
+
+</div>
+
+<script>
+function openEditBudget(catId, catName, currentLimit) {
+  document.getElementById('edit-cat-id').value = catId;
+  document.getElementById('edit-cat-limit').value = currentLimit || '';
+  document.getElementById('edit-budget-title').textContent = 'SET BUDGET — ' + catName.toUpperCase();
+  document.getElementById('edit-budget-modal').classList.add('is-open');
+}
+function closeEditBudget(e) {
+  if (!e || e.target === document.getElementById('edit-budget-modal')) {
+    document.getElementById('edit-budget-modal').classList.remove('is-open');
+  }
+}
+</script>
+{% endblock %}
