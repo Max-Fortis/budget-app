@@ -7,13 +7,8 @@
   <!-- Top App Bar -->
   <header class="topbar topbar--instrument">
     <div class="topbar__brand">
-      <img src="{{ url_for('static', filename='icons/logo-nav.svg') }}" alt="" class="topbar__logo-icon">
-      <span class="topbar__wordmark">INSTRUMENT<br>01</span>
-    </div>
-    <div class="topbar__meta">
-      <span class="topbar__meta-item">STATUS:<br>READY</span>
-      <span class="topbar__dot topbar__dot--red">●</span>
-      <span class="topbar__meta-item">SIGNAL:<br>HIGH</span>
+      <img src="{{ url_for('static', filename='icons/logo-iceberg.svg') }}" alt="" class="topbar__logo-icon">
+      <span class="topbar__wordmark">ICEBERG</span>
     </div>
   </header>
 
@@ -143,25 +138,6 @@
     </div>
   </div>
 
-  <!-- Bottom Nav Bar -->
-  <nav class="bottomnav">
-    <a href="{{ url_for('index') }}" class="bottomnav__item bottomnav__item--active">
-      <img src="{{ url_for('static', filename='icons/nav-add.svg') }}" alt="" class="bottomnav__icon">
-      <span>Add Spending</span>
-    </a>
-    <a href="{{ url_for('budgets') }}" class="bottomnav__item">
-      <img src="{{ url_for('static', filename='icons/nav-budgets.svg') }}" alt="" class="bottomnav__icon">
-      <span>Budgets</span>
-    </a>
-    <a href="{{ url_for('scan') }}" class="bottomnav__item">
-      <img src="{{ url_for('static', filename='icons/nav-stream.svg') }}" alt="" class="bottomnav__icon">
-      <span>Scan</span>
-    </a>
-    <a href="#" class="bottomnav__item" onclick="document.getElementById('set-budget-section').style.display='block'; return false;">
-      <img src="{{ url_for('static', filename='icons/nav-setup.svg') }}" alt="" class="bottomnav__icon">
-      <span>Setup</span>
-    </a>
-  </nav>
 
 </div>
 

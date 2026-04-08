@@ -314,4 +314,4 @@ if __name__ == '__main__':
         init_default_categories()
 
     # Run the app
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

@@ -12,5 +12,23 @@
 </head>
 <body>
     {% block body %}{% endblock %}
+
+    <!-- Shared Bottom Nav — active state set by request.endpoint -->
+    {% if request.endpoint in ['index', 'scan', 'budgets'] %}
+    <nav class="bottomnav">
+      <a href="{{ url_for('index') }}" class="bottomnav__item {% if request.endpoint in ['index', 'scan'] %}bottomnav__item--active{% endif %}">
+        <img src="{{ url_for('static', filename='icons/nav-add.svg') }}" alt="" class="bottomnav__icon">
+        <span>Add Spending</span>
+      </a>
+      <a href="{{ url_for('budgets') }}" class="bottomnav__item {% if request.endpoint == 'budgets' %}bottomnav__item--active{% endif %}">
+        <img src="{{ url_for('static', filename='icons/nav-budgets.svg') }}" alt="" class="bottomnav__icon">
+        <span>Budgets</span>
+      </a>
+      <a href="#" class="bottomnav__item" onclick="document.getElementById('set-budget-section').style.display='block'; return false;">
+        <img src="{{ url_for('static', filename='icons/nav-setup.svg') }}" alt="" class="bottomnav__icon">
+        <span>Setup</span>
+      </a>
+    </nav>
+    {% endif %}
 </body>
 </html>
