@@ -8,6 +8,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     is_custom = db.Column(db.Boolean, default=False)
+    budget_limit = db.Column(db.Float, default=0.0, server_default='0')
 
     # Relationship: one category can have many transactions
     transactions = db.relationship('Transaction', backref='category', lazy=True)
