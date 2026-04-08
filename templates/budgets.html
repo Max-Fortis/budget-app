@@ -4,29 +4,39 @@
 {% block body %}
 <div class="app-shell">
 
-  <!-- Top App Bar -->
-  <header class="topbar topbar--simple">
-    <div class="topbar__brand">
-      <img src="{{ url_for('static', filename='icons/logo-icon.svg') }}" alt="" class="topbar__logo-icon">
-      <span class="topbar__wordmark topbar__wordmark--dark">ICEBERG</span>
-    </div>
-    <div class="topbar__status">
-      <span class="topbar__dot topbar__dot--red"></span>
-      <span class="label-caps label-caps--muted">ACTIVE</span>
-    </div>
-  </header>
 
   <main class="main-content">
 
     <!-- Header Section -->
     <section class="budgets-header">
-      <h1 class="budgets-title">Overview</h1>
+      <div class="budgets-header__top">
+        <h1 class="budgets-title">Overview</h1>
+        <button class="budget-card__edit-btn" onclick="toggleMonthlyEdit()">EDIT BUDGET</button>
+      </div>
       <p class="budgets-subtitle">Monthly Budgets // {{ month_name }}</p>
+
+      <!-- Inline monthly budget edit -->
+      <div id="monthly-edit-form" class="inline-edit" style="display:none;">
+        <form action="/set_budget" method="POST" class="inline-edit__form">
+          <input type="number" name="monthly_limit" step="0.01"
+                 value="{{ budget.monthly_limit if budget else '' }}"
+                 placeholder="Monthly limit e.g. 2000.00"
+                 class="field inline-edit__input" autofocus>
+          <button type="submit" class="btn-primary">SAVE</button>
+          <button type="button" class="btn-secondary" onclick="toggleMonthlyEdit()">CANCEL</button>
+        </form>
+      </div>
+
       <div class="budgets-remaining">
         <p class="label-tiny label-tiny--muted">Left to Spend</p>
         <p class="budgets-remaining__amount {% if remaining < 0 %}budgets-remaining__amount--over{% endif %}">
           {% if remaining >= 0 %}+{% endif %}${{ "%.2f"|format(remaining) }}
         </p>
+        {% if budget %}
+        <p class="label-tiny label-tiny--muted" style="margin-top:4px;">of ${{ "%.2f"|format(budget.monthly_limit) }} monthly limit</p>
+        {% else %}
+        <p class="label-tiny label-tiny--muted" style="margin-top:4px;">No monthly limit set — click Edit Budget to add one</p>
+        {% endif %}
       </div>
     </section>
 
@@ -53,11 +63,25 @@
     <section class="budget-grid">
       {% for item in category_data %}
       {% if item.spent > 0 or item.limit > 0 %}
-      <div class="budget-card">
+      <div class="budget-card" id="card-{{ item.category.id }}">
         <div class="budget-card__header">
           <h2 class="budget-card__name">{{ item.category.name | upper }}</h2>
-          <button class="budget-card__edit-btn" onclick="openEditBudget({{ item.category.id }}, '{{ item.category.name }}', {{ item.limit }})">EDIT</button>
+          <button class="budget-card__edit-btn" onclick="toggleCatEdit({{ item.category.id }})">EDIT</button>
         </div>
+
+        <!-- Inline category edit -->
+        <div id="cat-edit-{{ item.category.id }}" class="inline-edit" style="display:none;">
+          <form action="/set_category_budget" method="POST" class="inline-edit__form">
+            <input type="hidden" name="category_id" value="{{ item.category.id }}">
+            <input type="number" name="limit" step="0.01"
+                   value="{{ item.limit if item.limit > 0 else '' }}"
+                   placeholder="Set limit e.g. 500.00"
+                   class="field inline-edit__input">
+            <button type="submit" class="btn-primary">SAVE</button>
+            <button type="button" class="btn-secondary" onclick="toggleCatEdit({{ item.category.id }})">CANCEL</button>
+          </form>
+        </div>
+
         <div class="budget-card__amounts">
           <span class="budget-card__spent">
             ${{ "%d"|format(item.spent|int) }}<span class="budget-card__cents">.{{ "%02d"|format(((item.spent % 1) * 100)|int) }}</span>
@@ -115,37 +139,21 @@
 
   </main>
 
-  <!-- Edit Budget Modal -->
-  <div class="modal-overlay" id="edit-budget-modal" onclick="closeEditBudget(event)">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <h2 class="modal-title" id="edit-budget-title">SET BUDGET</h2>
-      <form action="/set_category_budget" method="POST" class="modal-form">
-        <input type="hidden" id="edit-cat-id" name="category_id">
-        <label class="field-label">MONTHLY LIMIT ($)</label>
-        <input type="number" id="edit-cat-limit" name="limit" step="0.01" placeholder="0.00" required class="field">
-        <div class="modal-actions">
-          <button type="button" class="btn-secondary" onclick="closeEditBudget()">CANCEL</button>
-          <button type="submit" class="btn-primary">SAVE</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-
 </div>
 
 <script>
-function openEditBudget(catId, catName, currentLimit) {
-  document.getElementById('edit-cat-id').value = catId;
-  document.getElementById('edit-cat-limit').value = currentLimit || '';
-  document.getElementById('edit-budget-title').textContent = 'SET BUDGET — ' + catName.toUpperCase();
-  document.getElementById('edit-budget-modal').classList.add('is-open');
+function toggleMonthlyEdit() {
+  const form = document.getElementById('monthly-edit-form');
+  const visible = form.style.display !== 'none';
+  form.style.display = visible ? 'none' : 'block';
+  if (!visible) form.querySelector('input').focus();
 }
-function closeEditBudget(e) {
-  if (!e || e.target === document.getElementById('edit-budget-modal')) {
-    document.getElementById('edit-budget-modal').classList.remove('is-open');
-  }
+
+function toggleCatEdit(catId) {
+  const form = document.getElementById('cat-edit-' + catId);
+  const visible = form.style.display !== 'none';
+  form.style.display = visible ? 'none' : 'block';
+  if (!visible) form.querySelector('input[type=number]').focus();
 }
 </script>
 {% endblock %}

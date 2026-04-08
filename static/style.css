@@ -79,14 +79,7 @@ html, body {
   z-index: 100;
 }
 
-.topbar--instrument { background: var(--paper); }
-.topbar--simple     { background: var(--paper); }
-.topbar--frosted    {
-  background: rgba(253,250,245,.85);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border-bottom-color: var(--ink-05);
-}
+.topbar { background: var(--paper); }
 
 .topbar__brand {
   display: flex;
@@ -106,7 +99,6 @@ html, body {
   line-height: 1.4;
   color: var(--ink);
 }
-.topbar__wordmark--dark { font-size: 18px; letter-spacing: -0.45px; text-transform: uppercase; }
 
 .topbar__meta {
   display: flex;
@@ -577,6 +569,18 @@ html, body {
   background: var(--blue);
 }
 
+/* ─── Inline edit ─── */
+.inline-edit { margin: 12px 0; }
+.inline-edit__form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.inline-edit__input {
+  flex: 1;
+  min-width: 0;
+}
+
 /* ─── Inline form (setup) ─── */
 .inline-form {
   display: flex;
@@ -737,6 +741,13 @@ html, body {
   padding-bottom: 33px;
   margin-bottom: 40px;
 }
+.budgets-header__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
 .budgets-title {
   font-size: 48px;
   font-weight: 700;

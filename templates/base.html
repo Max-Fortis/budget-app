@@ -15,6 +15,18 @@
 
     <!-- Shared Bottom Nav — active state set by request.endpoint -->
     {% if request.endpoint in ['index', 'scan', 'budgets'] %}
+    <header class="topbar">
+      <div class="topbar__brand">
+        <img src="{{ url_for('static', filename='icons/logo-iceberg.svg') }}" alt="" class="topbar__logo-icon">
+        <span class="topbar__wordmark">ICEBERG</span>
+      </div>
+      <div class="topbar__status">
+        <span class="topbar__dot"></span>
+      </div>
+    </header>
+    {% endif %}
+
+    {% if request.endpoint in ['index', 'scan', 'budgets'] %}
     <nav class="bottomnav">
       <a href="{{ url_for('index') }}" class="bottomnav__item {% if request.endpoint in ['index', 'scan'] %}bottomnav__item--active{% endif %}">
         <img src="{{ url_for('static', filename='icons/nav-add.svg') }}" alt="" class="bottomnav__icon">
