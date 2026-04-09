@@ -79,14 +79,7 @@ html, body {
   z-index: 100;
 }
 
-.topbar--instrument { background: var(--paper); }
-.topbar--simple     { background: var(--paper); }
-.topbar--frosted    {
-  background: rgba(253,250,245,.85);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border-bottom-color: var(--ink-05);
-}
+.topbar { background: var(--paper); }
 
 .topbar__brand {
   display: flex;
@@ -106,7 +99,6 @@ html, body {
   line-height: 1.4;
   color: var(--ink);
 }
-.topbar__wordmark--dark { font-size: 18px; letter-spacing: -0.45px; text-transform: uppercase; }
 
 .topbar__meta {
   display: flex;
@@ -137,6 +129,7 @@ html, body {
   border-radius: 50%;
   background: var(--primary);
 }
+
 
 .topbar__back-group {
   display: flex;
@@ -577,6 +570,64 @@ html, body {
   background: var(--blue);
 }
 
+/* ─── Setup page ─── */
+.setup-section { }
+.setup-section__desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: rgba(27,28,24,0.6);
+  margin-top: 16px;
+  line-height: 1.5;
+}
+.category-list { list-style: none; }
+.category-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ink-05);
+}
+.category-item__name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.category-item__delete {
+  background: none;
+  border: none;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.category-item__delete:disabled {
+  color: var(--ink-20);
+  cursor: not-allowed;
+}
+.form-error {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--primary);
+  margin-top: 6px;
+}
+
+/* ─── Inline edit ─── */
+.inline-edit { margin: 12px 0; }
+.inline-edit__form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.inline-edit__input {
+  flex: 1;
+  min-width: 0;
+}
+
 /* ─── Inline form (setup) ─── */
 .inline-form {
   display: flex;
@@ -589,6 +640,18 @@ html, body {
 /* ═══════════════════════════════════════════
    SCAN PAGE
 ═══════════════════════════════════════════ */
+
+.scan-back {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-60);
+  text-decoration: none;
+  position: absolute;
+  top: calc(var(--topbar-h) + 24px);
+  left: 24px;
+}
+.scan-back:hover { color: var(--ink); }
 
 .scan-content {
   flex: 1;
@@ -737,6 +800,13 @@ html, body {
   padding-bottom: 33px;
   margin-bottom: 40px;
 }
+.budgets-header__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
 .budgets-title {
   font-size: 48px;
   font-weight: 700;

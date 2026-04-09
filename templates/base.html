@@ -14,7 +14,19 @@
     {% block body %}{% endblock %}
 
     <!-- Shared Bottom Nav — active state set by request.endpoint -->
-    {% if request.endpoint in ['index', 'scan', 'budgets'] %}
+    {% if request.endpoint in ['index', 'scan', 'budgets', 'setup'] %}
+    <header class="topbar">
+      <div class="topbar__brand">
+        <img src="{{ url_for('static', filename='icons/logo-iceberg.svg') }}" alt="" class="topbar__logo-icon">
+        <span class="topbar__wordmark">ICEBERG</span>
+      </div>
+      <div class="topbar__status">
+        <span class="topbar__dot"></span>
+      </div>
+    </header>
+    {% endif %}
+
+    {% if request.endpoint in ['index', 'scan', 'budgets', 'setup'] %}
     <nav class="bottomnav">
       <a href="{{ url_for('index') }}" class="bottomnav__item {% if request.endpoint in ['index', 'scan'] %}bottomnav__item--active{% endif %}">
         <img src="{{ url_for('static', filename='icons/nav-add.svg') }}" alt="" class="bottomnav__icon">
@@ -24,7 +36,7 @@
         <img src="{{ url_for('static', filename='icons/nav-budgets.svg') }}" alt="" class="bottomnav__icon">
         <span>Budgets</span>
       </a>
-      <a href="#" class="bottomnav__item" onclick="document.getElementById('set-budget-section').style.display='block'; return false;">
+      <a href="{{ url_for('setup') }}" class="bottomnav__item {% if request.endpoint == 'setup' %}bottomnav__item--active{% endif %}">
         <img src="{{ url_for('static', filename='icons/nav-setup.svg') }}" alt="" class="bottomnav__icon">
         <span>Setup</span>
       </a>

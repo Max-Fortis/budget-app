@@ -4,18 +4,8 @@
 {% block body %}
 <div class="app-shell app-shell--light">
 
-  <!-- Top App Bar -->
-  <header class="topbar topbar--frosted">
-    <div class="topbar__back-group">
-      <a href="{{ url_for('index') }}" class="topbar__back">
-        <img src="{{ url_for('static', filename='icons/icon-back.svg') }}" alt="Back">
-      </a>
-      <span class="topbar__wordmark topbar__wordmark--dark">ICEBERG</span>
-    </div>
-    <div class="topbar__avatar">
-      <img src="{{ url_for('static', filename='icons/logo-dots.svg') }}" alt="Profile" class="topbar__avatar-img">
-    </div>
-  </header>
+
+  <a href="{{ url_for('index') }}" class="scan-back">&#8592; Back</a>
 
   <!-- Main scan area -->
   <main class="scan-content">

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Iceberg — Setup{% endblock %}
+
+{% block body %}
+<div class="app-shell">
+
+  <main class="main-content">
+
+    <!-- Categories -->
+    <section class="setup-section">
+      <div class="section-divider">
+        <span class="divider-line"></span>
+        <span class="label-caps label-caps--muted">CATEGORIES</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <ul class="category-list">
+        {% for cat in categories %}
+        <li class="category-item">
+          <span class="category-item__name">{{ cat.name }}</span>
+          <form action="/delete_category/{{ cat.id }}" method="POST" style="display:inline;">
+            <button type="submit" class="category-item__delete"
+              {% if cat.transactions %}disabled title="Has transactions"{% endif %}>
+              REMOVE
+            </button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <!-- Inline add -->
+      <div class="inline-edit" style="margin-top:16px;">
+        <form class="inline-edit__form" id="add-cat-form">
+          <input type="text" id="new-cat-name" class="field inline-edit__input" placeholder="New category name">
+          <button type="submit" class="btn-primary">ADD</button>
+        </form>
+        <p id="add-cat-error" class="form-error" style="display:none;"></p>
+      </div>
+    </section>
+
+    <!-- Export -->
+    <section class="setup-section" style="margin-top:48px;">
+      <div class="section-divider">
+        <span class="divider-line"></span>
+        <span class="label-caps label-caps--muted">EXPORT</span>
+        <span class="divider-line"></span>
+      </div>
+      <p class="setup-section__desc">Download all transactions as a CSV file — importable into Google Sheets or Excel.</p>
+      <a href="/export_csv" class="btn-primary" style="display:inline-flex; margin-top:16px;">DOWNLOAD CSV</a>
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+document.getElementById('add-cat-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const name = document.getElementById('new-cat-name').value.trim();
+  const error = document.getElementById('add-cat-error');
+  if (!name) return;
+
+  const res = await fetch('/add_category_json', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name })
+  });
+  const data = await res.json();
+
+  if (data.error) {
+    error.textContent = data.error;
+    error.style.display = 'block';
+  } else {
+    // Reload page to show updated list
+    window.location.reload();
+  }
+});
+</script>
+{% endblock %}
