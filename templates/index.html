@@ -89,7 +89,6 @@
         {% endif %}
       </div>
 
-      <a href="{{ url_for('budgets') }}" class="archive-btn">ACCESS FULL ARCHIVE</a>
     </section>
 
     <!-- Set Budget (hidden, accessible from nav) -->
@@ -113,12 +112,22 @@
         <input type="number" id="amount-input" name="amount" step="0.01" placeholder="0.00" required class="field">
 
         <label class="field-label">CATEGORY</label>
-        <select id="category-select" name="category_id" required class="field">
+        <select id="category-select" name="category_id" required class="field" onchange="handleCategoryChange(this)">
           <option value="">Select Category</option>
           {% for category in categories %}
             <option value="{{ category.id }}">{{ category.name }}</option>
           {% endfor %}
+          <option value="__new__">＋ Add new category...</option>
         </select>
+
+        <!-- Inline new category -->
+        <div id="new-cat-row" class="inline-edit" style="display:none; margin-top:8px;">
+          <div class="inline-edit__form">
+            <input type="text" id="new-cat-input" class="field inline-edit__input" placeholder="Category name">
+            <button type="button" class="btn-primary" onclick="createCategory()">ADD</button>
+          </div>
+          <p id="new-cat-error" class="form-error" style="display:none;"></p>
+        </div>
 
         <label class="field-label">DESCRIPTION</label>
         <input type="text" id="description-input" name="description" placeholder="Optional" class="field">
@@ -135,6 +144,46 @@
 </div>
 
 <script>
+function handleCategoryChange(select) {
+  const row = document.getElementById('new-cat-row');
+  if (select.value === '__new__') {
+    row.style.display = 'block';
+    document.getElementById('new-cat-input').focus();
+    select.value = ''; // reset so form won't submit with __new__
+  } else {
+    row.style.display = 'none';
+  }
+}
+
+async function createCategory() {
+  const name = document.getElementById('new-cat-input').value.trim();
+  const error = document.getElementById('new-cat-error');
+  if (!name) return;
+
+  const res = await fetch('/add_category_json', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name })
+  });
+  const data = await res.json();
+
+  if (data.error) {
+    error.textContent = data.error;
+    error.style.display = 'block';
+  } else {
+    // Add new option to select and select it
+    const select = document.getElementById('category-select');
+    const option = new Option(data.name, data.id, true, true);
+    // Insert before the "Add new" option
+    const newOpt = select.querySelector('option[value="__new__"]');
+    select.insertBefore(option, newOpt);
+    select.value = data.id;
+    document.getElementById('new-cat-row').style.display = 'none';
+    document.getElementById('new-cat-input').value = '';
+    error.style.display = 'none';
+  }
+}
+
 function openManualEntry() {
   document.getElementById('manual-modal').classList.add('is-open');
 }

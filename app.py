@@ -292,6 +292,62 @@ def set_category_budget():
     return redirect(url_for('budgets'))
 
 
+@app.route('/setup')
+def setup():
+    """Setup page — manage categories and export data"""
+    categories = Category.query.order_by(Category.name).all()
+    return render_template('setup.html', categories=categories)
+
+
+@app.route('/delete_category/<int:category_id>', methods=['POST'])
+def delete_category(category_id):
+    """Delete a category (only if it has no transactions)"""
+    category = Category.query.get_or_404(category_id)
+    if category.transactions:
+        return jsonify({'error': 'Category has transactions and cannot be deleted'}), 400
+    db.session.delete(category)
+    db.session.commit()
+    return redirect(url_for('setup'))
+
+
+@app.route('/add_category_json', methods=['POST'])
+def add_category_json():
+    """Add a category and return JSON — used by inline add in forms"""
+    name = request.json.get('name', '').strip()
+    if not name:
+        return jsonify({'error': 'Name required'}), 400
+    if Category.query.filter_by(name=name).first():
+        return jsonify({'error': 'Category already exists'}), 400
+    category = Category(name=name, is_custom=True)
+    db.session.add(category)
+    db.session.commit()
+    return jsonify({'id': category.id, 'name': category.name})
+
+
+@app.route('/export_csv')
+def export_csv():
+    """Export all transactions as a CSV file"""
+    import csv, io
+    transactions = Transaction.query.order_by(Transaction.date.desc()).all()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['Date', 'Description', 'Category', 'Amount'])
+    for t in transactions:
+        writer.writerow([
+            t.date.strftime('%Y-%m-%d %H:%M'),
+            t.description or '',
+            t.category.name,
+            f'{t.amount:.2f}'
+        ])
+    output.seek(0)
+    from flask import Response
+    return Response(
+        output.getvalue(),
+        mimetype='text/csv',
+        headers={'Content-Disposition': 'attachment; filename=iceberg-transactions.csv'}
+    )
+
+
 @app.route('/styleguide')
 def styleguide():
     """Design system style guide"""
